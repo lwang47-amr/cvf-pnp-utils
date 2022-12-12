@@ -1,0 +1,60 @@
+import sys
+sys.path.append(r'C:\Program Files\PACS')
+import pyPACS as __pyPACS
+p = __pyPACS.PACS()
+p.runPACS("\"C:\Program Files\PACS\pacs.exe\"")
+p.loadConfig('C:\\Users\\jwsalter\\Documents\\PACS\\testconfig.csv')
+p.startDAQ()
+# Run workload
+p.record('C:\\Users\\jwsalter\\Documents\\PACS\\results','test_NAME')
+# Let workload finish
+p.stopRecord() or p.stop()
+p.exit()
+
+
+# or use time and wait optionally (seconds)
+p.record('C:\\Users\\jwsalter\\Documents\\PACS\\results','test_NAME', record-time, wait-time)
+
+
+# Example for automation to start record:
+import sys
+sys.path.append(pacs_dir)
+import pyPACS as __pyPACS
+p = __pyPACS.PACS()
+print("Using pypacs version " + p.version())
+p.runPACS(os.path.join(pacs_dir, r"pacs.exe"), runMinimized = False)
+p.loadConfig(config_file)
+p.record(output_dir, 'PACS_out')
+
+
+# Example for automation to stop record:
+import sys
+sys.path.append(pacs_dir)
+import pyPACS as __pyPACS
+p = __pyPACS.PACS()
+p.stopRecord()
+#p.exit()
+
+
+# Example of reading a measurement live from PACS:
+import sys
+sys.path.append(r'C:\Program Files\PACS')
+import pyPACS as __pyPACS
+p = __pyPACS.PACS()
+p.startDAQ()
+#p.getChannels()
+p.getData('P_SOC') # single sample
+p.getData('5s Filter P_SOC') # If filters are configured
+p.record(output_dir, 'PACS_out')
+# wait
+p.stopRecord()
+p.getData('P_SOC') # Average is the last recorded run but if you stop the DAQs (p.stop()) then it will clear. Use p.stopRecord().
+
+
+# Example of toggling DAQs digital io lines used for controlling things like the power switch:
+import sys
+sys.path.append(r'C:\Program Files\PACS')
+import pyPACS as __pyPACS
+p = __pyPACS.PACS()
+ioOut('PXI1Slot2/port0/line5', 1)
+
